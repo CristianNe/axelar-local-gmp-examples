@@ -9,6 +9,7 @@ const IERC20 = require('../../build/IERC20.json');
 async function test(chains, wallet, options = {}) {
     const args = options.args || [];
     const getDepositAddress = options.getDepositAddress;
+    
     const source = chains.find(chain => chain.name == (args[0] || 'Avalanche'));
     const destination = chains.find(chain => chain.name == (args[1] || 'Fantom'));
     const amount = args[2] || 10e6;

@@ -17,9 +17,9 @@ async function test(chains, wallet, options = {}) {
     for(const chain of [source, destination]) {
         const provider = getDefaultProvider(chain.rpc);
         chain.wallet = wallet.connect(provider);
-        chain.contract = new Contract(chain.gateway, Gateway.abi, chain.wallet);
+        chain.contract = new Contract(chain.gateway, Gateway.abi, chain.wallet); // Gateway contract
         const tokenAddress = await chain.contract.tokenAddresses(symbol);
-        chain.token = new Contract(tokenAddress, IERC20.abi, chain.wallet);
+        chain.token = new Contract(tokenAddress, IERC20.abi, chain.wallet); // Token to transfer
     }
     
     async function print() {
@@ -35,11 +35,13 @@ async function test(chains, wallet, options = {}) {
     console.log('--- Initially ---');
     await print();
 
+    // approve that gatway contract spends token
     await (await source.token.approve(
         source.gateway,
         amount, 
     )).wait();
     
+    // contracts sends Token
     await (await source.contract.sendToken(
         destination.name,
         destinationAddress,
